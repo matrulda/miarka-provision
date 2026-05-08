@@ -6,7 +6,7 @@ Production deployments on the monthly release cycle are done on the last Monday 
 
 Stage deployments from the bimonthly branch can be made outside of the monthly release cycle. The changes on the bimonthly branch would generally be pulled to the monthly branch and deployed to production in the monthly release cycle once all validations are complete.
 
-Important: It is very important to not squash commits before mergning persistent branches (monthly/bimonthly/main). This is however encouraged when merging feature branches that should be deleted after merge.
+Important: It is very important to not squash commits before merging persistent branches (monthly/bimonthly/main). This is however encouraged when merging feature branches that should be deleted after merge.
 
 ## Requirements
 
