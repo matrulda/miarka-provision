@@ -1,17 +1,15 @@
 ---
-- name: Deploy ngs2counts
-  copy:
-    src: "{{ olink_ngs2counts_dir }}/ngs2counts-{{ olink_ngs2counts_latest }}"
-    dest: "{{ arteria_node_ngs2counts_dest }}/ngs2counts-{{ olink_ngs2counts_latest }}"
-    mode: "0755"
-  tags: [olink_explore]
-
 - name: Create ngs2counts symlink
   file:
     src: "{{ olink_ngs2counts_dir }}/ngs2counts-{{ olink_ngs2counts_default }}"
-    dest: "{{ arteria_node_ngs2counts_dest }}/ngs2counts"
+    dest: "{{ arteria_service_src_path }}/ngs2counts"
     state: "link"
     force: true
-    mode: "0755"
-  tags: [olink_explore]
+    mode: "0775"
+ 
+- name: Clone ngs2counts nf workflow
+  git:
+    repo: "{{ olink_ngs2counts_nf_workflow }}"
+    dest: "{{ arteria_service_src_path }}"
+    version: "{{ olink_ngs2counts_nf_workflow_version }}"
 

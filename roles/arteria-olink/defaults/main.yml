@@ -3,8 +3,8 @@ arteria_service_name: arteria-olink
 arteria_olink_service_log: "{{ arteria_service_log_dir }}/{{ arteria_service_name }}.log"
 
 olink_ngs2counts_dir: "/vulpes/ngi/containers/ngs2counts"
-olink_ngs2counts_latest: ""
-olink_ngs2counts_default: ""
+olink_ngs2counts_default: "6.2.0"
 
 olink_ngs2counts_nf_workflow: "https://github.com/Molmed/ngs2counts_nextflow.git"
-olink_ngs2counts_nf_workflow_version: ""
+# TODO update when ready
+olink_ngs2counts_nf_workflow_version: "ece36a9b50fb4371aad16d8a357766e46c1bb0ca"
