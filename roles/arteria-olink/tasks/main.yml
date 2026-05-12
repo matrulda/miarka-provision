@@ -1,0 +1,17 @@
+---
+- name: Deploy ngs2counts
+  copy:
+    src: "{{ olink_ngs2counts_dir }}/ngs2counts-{{ olink_ngs2counts_latest }}"
+    dest: "{{ arteria_node_ngs2counts_dest }}/ngs2counts-{{ olink_ngs2counts_latest }}"
+    mode: "0755"
+  tags: [olink_explore]
+
+- name: Create ngs2counts symlink
+  file:
+    src: "{{ olink_ngs2counts_dir }}/ngs2counts-{{ olink_ngs2counts_default }}"
+    dest: "{{ arteria_node_ngs2counts_dest }}/ngs2counts"
+    state: "link"
+    force: true
+    mode: "0755"
+  tags: [olink_explore]
+
