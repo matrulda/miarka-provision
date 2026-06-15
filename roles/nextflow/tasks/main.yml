@@ -13,11 +13,6 @@
     path: "{{ nextflow_dest }}/workfiles"
     state: directory
 
-- name: Create NextFlow installation plugins subdirectory
-  file:
-    path: "{{ nextflow_dest }}/workfiles/plugins"
-    state: directory
-
 - name: Download NextFlow
   get_url:
     url: "{{ nextflow_download_url }}"
