@@ -5,7 +5,6 @@ main_workflow_path: "{{arteria_service_src_path}}/ngs2counts_nextflow/main.nf"
 # substitution on the following variables:
 # - {runfolder_path}
 # - {ngs2counts_executable}
-# - {ngs2counts_extra_args}
 nextflow_parameters:
   config: "{{arteria_service_src_path}}/ngs2counts_nextflow/nextflow.config"
   profile: "uppmax"
@@ -16,5 +15,4 @@ environment:
 pipeline_parameters:
   input_folder: "{runfolder_path}"
   ngs2counts_executable: "{ngs2counts_executable}"
-  ngs2counts_extra_args: "{ngs2counts_extra_args}"
   project: "{{uppmax_project}}"
