@@ -7,9 +7,9 @@
 
 - name: get sequencing report service from git
   git:
-    repo: "{{ seqreport_service_repo }}"
+    repo: "{{ nextflow_runner_service_repo }}"
     dest: "{{ arteria_service_src_path }}"
-    version: "{{ seqreport_service_version }}"
+    version: "{{ nextflow_runner_service_version }}"
 
 - name: get checksum pipeline from git
   git:
