@@ -1,11 +1,16 @@
 ---
 
-- name: create virtual python env for sequencing report service
-  shell: "conda create --name {{ arteria_service_name }} python=3.13"
+- name: create virtual python env for nextflow runner service
+  shell: "conda create --name {{ arteria_service_name }} python=3.14"
   args: 
     creates: "{{ arteria_service_env_root }}"
 
-- name: get sequencing report service from git
+- name: install uv
+  pip:
+    name: uv
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+
+- name: get nextflow runner service from git
   git:
     repo: "{{ nextflow_runner_service_repo }}"
     dest: "{{ arteria_service_src_path }}"
@@ -17,12 +22,11 @@
     dest: "{{ arteria_service_src_path }}/sis_style_checksums_nextflow/"
     version: "{{ sis_style_checksums_version }}"
 
-- name: install sequencing report service
-  pip:
-    name: .
+- name: install service and dependencies from lock file
+  shell: |
+    {{ arteria_service_env_root }}/bin/uv sync --locked --active
+  args:
     chdir: "{{ arteria_service_src_path }}"
-    executable: "{{ arteria_service_env_root }}/bin/pip"
-    state: present
 
 - name: create temp folder
   tempfile:
