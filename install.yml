@@ -100,6 +100,7 @@
     - { role: archive-verify-ws, tags: archive-verify }
     - { role: nf-core, tags: nf-core }
     - { role: kraken2, tags: kraken2 }
+    - { role: arteria-olink, tags: arteria-olink }
 
   tasks:
 
