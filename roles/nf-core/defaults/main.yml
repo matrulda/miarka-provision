@@ -65,9 +65,6 @@ pipelines:
   - name: nanoseq
     release: 3.1.0
     container_dir: "{{ biocontainers_dirname }}"
-  - name: scrnaseq
-    release: 2.3.0
-    container_dir: "{{ biocontainers_dirname }}"
   - name: demultiplex
     release: "{{ demultiplex_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
