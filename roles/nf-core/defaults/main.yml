@@ -56,9 +56,6 @@ pipelines:
   - name: atacseq
     release: 2.0
     container_dir: "{{ biocontainers_dirname }}"
-  - name: viralrecon
-    release: 2.6.0
-    container_dir: "{{ biocontainers_dirname }}"
   - name: nanoseq
     release: 3.1.0
     container_dir: "{{ biocontainers_dirname }}"
