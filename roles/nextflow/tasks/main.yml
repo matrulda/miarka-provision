@@ -1,30 +1,26 @@
 ---
-# The steps within the comments can be effectively replaced by 'module load Nextflow'
-# Currently the module has problems being automatically initialized
-###
-
-- name: Create NextFlow directory
+- name: Create top-level NextFlow directory
   file:
-    path: "{{ nextflow_dest }}"
+    path: "{{ nextflow_root }}"
     state: directory
 
-- name: Create NextFlow installation subdirectory
-  file:
-    path: "{{ nextflow_dest }}/workfiles"
-    state: directory
+- name: Install each Nextflow version
+  include_tasks: install_version.yml
+  vars:
+    nf_version: "{{ item }}"
+    nf_version_plugins: "{{ nextflow_plugins_root }}"
+    nf_version_dest: "{{ nextflow_root }}/{{ item.version }}"
+    nf_version_download_url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ item.version }}/nextflow"
+  loop: "{{ nextflow_versions }}"
+  loop_control:
+    loop_var: item
+  tags: nextflow_versions
 
-- name: Download NextFlow
-  get_url:
-    url: "{{ nextflow_download_url }}"
+- name: Deploy Nextflow version-selector wrapper
+  template:
+    src: "nextflow_wrapper.sh.j2"
     dest: "{{ nextflow_dest }}/nextflow"
-    mode: u=rwx
-
-# Resolved any problems. Run-time files are pushed to scratch
-- name: Install NextFlow
-  shell: "./nextflow"
-  environment: "{{ nextflow_local_env }}"
-  args:
-    chdir: "{{ nextflow_dest }}"
+    mode: u=rwx,g=rx,o=rx
 
 - name: Add NextFlow to $PATH
   lineinfile:
@@ -58,7 +54,7 @@
     # Path to java to be used for nextflow
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
     - export NXF_SINGULARITY_HOME_MOUNT={{ nextflow_env.NXF_SINGULARITY_HOME_MOUNT }}
-    - export NXF_PLUGINS_DIR={{ nextflow_env.NXF_PLUGINS_DIR }}
+    - export NXF_PLUGINS_DIR={{ nextflow_plugins_root }}
     - export NXF_HOME={{ nextflow_env.NXF_HOME }}
     - export NXF_OFFLINE='true'
 

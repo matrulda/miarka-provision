@@ -18,6 +18,7 @@ biocontainers_dirname: biocontainers
 pipelines:
   - name: rnaseq
     release: "{{ rnaseq_tag }}"
+    nextflow_version: "25.10.2"
     container_dir: "{{ biocontainers_dirname }}"
     repository: NationalGenomicsInfrastructure/nfcore_rnaseq
   - name: sarek
@@ -38,6 +39,7 @@ pipelines:
     # https://github.com/NationalGenomicsInfrastructure/miarka-provision/pull/340
     # can be removed when upgrading the methylseq pipeline
     release: 4.2.0
+    nextflow_version: "25.10.2"
     container_dir: "{{ biocontainers_dirname }}"
     extra_parameters:
       references:
@@ -49,21 +51,26 @@ pipelines:
           sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
   - name: ampliseq
     release: 2.12.0
+    nextflow_version: "25.10.2"
     extra_parameters:
       silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
       silva_zip: Silva_132_release.zip
     container_dir: "{{ biocontainers_dirname }}"
   - name: atacseq
     release: 2.0
+    nextflow_version: "25.10.2"
     container_dir: "{{ biocontainers_dirname }}"
   - name: demultiplex
     release: "{{ demultiplex_tag }}"
+    nextflow_version: "25.10.2"
     container_dir: "{{ biocontainers_dirname }}"
   - name: pixelator
     release: 2.3.0
+    nextflow_version: "25.10.2"
     container_dir: "{{ biocontainers_dirname }}"
   - name: seqinspector
     release: 1.1.0
+    nextflow_version: "25.10.2"
     container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
