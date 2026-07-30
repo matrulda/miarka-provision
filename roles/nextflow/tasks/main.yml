@@ -9,31 +9,36 @@
   vars:
     nf_version: "{{ item }}"
     nf_version_plugins: "{{ nextflow_plugins_root }}"
-    nf_version_dest: "{{ nextflow_root }}/{{ item.version }}"
-    nf_version_download_url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ item.version }}/nextflow"
+    nf_version_dest: "{{ nextflow_root }}/{{ item }}"
+    nf_version_download_url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ item }}/nextflow"
   loop: "{{ nextflow_versions }}"
   loop_control:
     loop_var: item
   tags: nextflow_versions
 
-- name: Deploy Nextflow version-selector wrapper
+- name: Deploy Nextflow version selector wrapper
   template:
     src: "nextflow_wrapper.sh.j2"
-    dest: "{{ nextflow_dest }}/nextflow"
+    dest: "{{ nextflow_root }}/nextflow"
     mode: u=rwx,g=rx,o=rx
 
 - name: Add NextFlow to $PATH
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ nextflow_dest }}:$PATH"
+    line: "export PATH={{ nextflow_root }}:$PATH"
     backup: no
+
+- name: Create top-level NextFlow plugin directory
+  file:
+    path: "{{ nextflow_plugins_root }}"
+    state: directory
 
 - name: Download Nextflow plugins
   command: "./nextflow plugin install {{ item.name }}@{{ item.version }}"
   environment: "{{ nextflow_local_env }}"
   with_items: "{{ nextflow_plugins }}"
   args:
-    chdir: "{{ nextflow_dest }}"
+    chdir: "{{ nextflow_root }}"
   tags: plugins
 
 - name: Create miarka config
@@ -61,4 +66,4 @@
 - name: Store nextflow version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "Nextflow: {{ nextflow_version_tag }}"
+    line: "Nextflow (default): {{ nextflow_versions | first }}"
