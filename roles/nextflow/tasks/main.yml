@@ -12,8 +12,6 @@
     nf_version_dest: "{{ nextflow_root }}/{{ item }}"
     nf_version_download_url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ item }}/nextflow"
   loop: "{{ nextflow_versions }}"
-  loop_control:
-    loop_var: item
   tags: nextflow_versions
 
 - name: Deploy Nextflow version selector wrapper
@@ -33,13 +31,18 @@
     path: "{{ nextflow_plugins_root }}"
     state: directory
 
-- name: Download Nextflow plugins
+- name: Download Nextflow plugins (each with its target Nextflow version)
   command: "./nextflow plugin install {{ item.name }}@{{ item.version }}"
-  environment: "{{ nextflow_local_env }}"
-  with_items: "{{ nextflow_plugins }}"
+  environment:
+    NXF_HOME: "{{ nextflow_root }}/{{ item.nf_version_version }}/workfiles"
+    NXF_OPTS: -Xms1g -Xmx3500m
+    NXF_JAVA_HOME: "{{ nextflow_java }}"
+    NXF_PLUGINS_DIR: "{{ nextflow_plugins_root }}"
+    PATH: "{{ tools_path.PATH }}"
   args:
     chdir: "{{ nextflow_root }}"
-  tags: plugins
+  loop: "{{ nextflow_plugins }}"
+  tags: nextflow_plugins
 
 - name: Create miarka config
   template:
@@ -55,15 +58,14 @@
     backup: no
   with_items:
     - export NXF_LAUNCHER="{{ nextflow_env.NXF_LAUNCHER }}"
-    - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
-    # Path to java to be used for nextflow
-    - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
-    - export NXF_SINGULARITY_HOME_MOUNT={{ nextflow_env.NXF_SINGULARITY_HOME_MOUNT }}
-    - export NXF_PLUGINS_DIR={{ nextflow_plugins_root }}
-    - export NXF_HOME={{ nextflow_env.NXF_HOME }}
+    - export NXF_OPTS="{{ nextflow_env.NXF_OPTS }}"
+    - export NXF_JAVA_HOME="{{ nextflow_env.NXF_JAVA_HOME }}"
+    - export NXF_SINGULARITY_HOME_MOUNT="{{ nextflow_env.NXF_SINGULARITY_HOME_MOUNT }}"
+    - export NXF_PLUGINS_DIR="{{ nextflow_plugins_root }}"
+    - export NXF_HOME="{{ nextflow_env.NXF_HOME }}"
     - export NXF_OFFLINE='true'
 
-- name: Store nextflow version in deployment
+- name: Store default nextflow version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "Nextflow (default): {{ nextflow_versions | first }}"
+    line: "Default nextflow version: {{ nextflow_versions | first }}"
