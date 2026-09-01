@@ -50,4 +50,6 @@ nextflow_plugins:
   - name: nf-tower
     version: "1.17.6"
     nf_version: "25.10.2"
-
+  - name: nf-slack
+    version: "0.5.1"
+    nf_version: "25.10.4"
